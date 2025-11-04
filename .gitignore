@@ -1,0 +1,43 @@
+# Node.js and npm
+node_modules/
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json # Optional, if you prefer to manage dependencies with yarn.lock only
+
+# Build artifacts
+build/
+dist/
+public/build/ # For client-side build output
+client/build/ # If your client-side build output is in a 'client/build' directory
+
+# Editor and OS specific files
+.DS_Store
+.vscode/ # VS Code specific files
+.idea/ # IntelliJ IDEA specific files
+*.sublime-project
+*.sublime-workspace
+
+# Log files
+*.log
+logs/
+
+# MongoDB related files
+data/db/ # Default MongoDB data directory
+dump/ # MongoDB dump files
+
+# Testing related files
+coverage/ # Code coverage reports
+
+# Environment specific files (sensitive data)
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Thumbnails and temporary files
+Thumbs.db
+*.bak
+*.swp
+*~
