@@ -1,6 +1,8 @@
 import express from "express";
-import User from "../models/user.model.js"
+import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
 const router = express.Router();
 
 router.post("/signup", async (req,res) => {
@@ -31,7 +33,7 @@ router.post("/signup", async (req,res) => {
         success:false
     })
    }
-})
+});
 
 router.post('/login', async (req,res) => {
     try {
@@ -39,30 +41,42 @@ router.post('/login', async (req,res) => {
 
         if(!user) {
             return res.send({
-                message : "User doesnt exist with this email.",
+                message : "User does not exist with this email.",
                 success: false,
-            })
+            });
         }
 
         const isValid = await bcrypt.compare(req.body.password, user.password);
 
         if(!isValid) {
             return res.send({
-                message : "User doesnt exist with this email.",
+                message : "Incorrect password.",
                 success: false,
-            })
+            });
         }
 
-        const token = jwt.sign({userId: user._id}, process.env.SECRET_KEY, {expiresIn:"1d"});
+        const token = jwt.sign(
+            {userId: user._id}, 
+            process.env.SECRET_KEY, 
+            {expiresIn:"1d"}
+        );
 
-        res.send({
-            message:"User Logged In Successfully!",
-            success:true
-        })
+        return res.status(200).send({
+            success: true,
+            message: "Login successful.",
+            token,
+            user: {
+                _id: user._id,
+                email: user.email
+            }
+        });
 
     } catch (error) {
-        
+        return res.send({
+            success:false,
+            message: error.message
+        });
     }
-})
+});
 
 export default router;
