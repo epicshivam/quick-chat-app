@@ -10,7 +10,7 @@ router.post("/signup", async (req,res) => {
      const user = await User.findOne({email : req.body.email});
     
     if(user) {
-        return res.send({
+        return res.status(409).json({
             message : "User Already Exists!",
             success : false,
         })
@@ -22,13 +22,13 @@ router.post("/signup", async (req,res) => {
     const newUser = new User(req.body);
     await newUser.save();
     
-    res.send({
+    res.status(201).json({
         message : "User Created Successfully.",
         success:true
     })
 
    } catch (error) {
-    res.send({
+    res.status(500).json({
         message : error.message,
         success:false
     })
@@ -40,7 +40,7 @@ router.post('/login', async (req,res) => {
         const user = await User.findOne({email:req.body.email});
 
         if(!user) {
-            return res.send({
+            return res.status(404).json({
                 message : "User does not exist with this email.",
                 success: false,
             });
@@ -49,19 +49,15 @@ router.post('/login', async (req,res) => {
         const isValid = await bcrypt.compare(req.body.password, user.password);
 
         if(!isValid) {
-            return res.send({
+            return res.status(400).json({
                 message : "Incorrect password.",
                 success: false,
             });
         }
 
-        const token = jwt.sign(
-            {userId: user._id}, 
-            process.env.SECRET_KEY, 
-            {expiresIn:"1d"}
-        );
+        const token = jwt.sign({userId: user._id}, process.env.SECRET_KEY, {expiresIn:"1d"});
 
-        return res.status(200).send({
+        return res.status(200).json({
             success: true,
             message: "Login successful.",
             token,
@@ -72,9 +68,9 @@ router.post('/login', async (req,res) => {
         });
 
     } catch (error) {
-        return res.send({
-            success:false,
-            message: error.message
+        return res.status(500).json({
+            message: error.message,
+            success:false
         });
     }
 });
