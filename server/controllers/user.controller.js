@@ -3,7 +3,7 @@ import User from "../models/user.model.js";
 import authMiddleware from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
-router.get("get-logged-user", authMiddleware, async (req,res)=>{
+router.get("/get-logged-user", authMiddleware, async (req,res)=>{
     try {
         const user = await User.findOne({_id:req.user});
 
@@ -26,3 +26,30 @@ router.get("get-logged-user", authMiddleware, async (req,res)=>{
         })
     }
 })
+
+
+router.get("/get-all-user", authMiddleware, async (req,res)=>{
+    try {
+        const allUser = await User.find({_id:{$ne: req.user}});
+
+        if(!allUser) {
+            res.status(400).json({
+                message:"User not found",
+                success:false
+            })
+        }
+
+        res.status(200).json({
+            message:"Users fetched successfully!",
+            success:true,
+            data:allUser,
+        })
+    } catch (error) {
+        res.status(401).json({
+            message:"Invalid Token",
+            success:false
+        })
+    }
+})
+
+export default router;
