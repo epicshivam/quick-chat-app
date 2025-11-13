@@ -2,7 +2,7 @@ import { text } from "express";
 import mongoose, { mongo } from "mongoose";
 
 const messageSchema = new mongoose.Schema({
-    chat : {
+    chatId : {
         type : mongoose.Schema.Types.ObjectId, ref : "chats",
     },
     sender : {
