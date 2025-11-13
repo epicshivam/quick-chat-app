@@ -30,7 +30,7 @@ router.get("/get-all-chat", authMiddleware, async (req, res)=> {
 
         const allChat = await Chat.find({members : {$in : req.user}});
         
-        res.status(201).json({
+        res.status(200).json({
             message:`Chats found successfully`,
             success:true,
             data:allChat
