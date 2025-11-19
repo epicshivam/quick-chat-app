@@ -10,7 +10,7 @@ const messageSchema = new mongoose.Schema({
     },
     text : {
         type : String,
-        required,
+        required : true,
     },
     read : {
         type : Boolean,

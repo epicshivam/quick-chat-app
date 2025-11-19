@@ -28,4 +28,23 @@ router.post('/new-message', authMiddleware, async (req,res) => {
     }
 })
 
+router.get('/get-all-message/:chatId', authMiddleware, async (req,res) => {
+    try {
+        
+        const allMessages = await Message.find({chatId:req.params.chatId}).sort({createdAt:1});
+
+        res.status(200).json({
+            message : "Messages fetched successfully.",
+            success : true,
+            data : allMessages
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            message:error.message,
+            success:false
+        })
+    }
+})
+
 export default router;
