@@ -1,13 +1,33 @@
 import React, { useState } from 'react'
 import {Link} from "react-router-dom";
+import { loginUser } from '../apiCalls/auth.js';
 
 const Login = () => {
 
   const [user, setUser] = useState({email : "", password : ""});
 
-  function formSubmitHandler(event) {
+  async function formSubmitHandler(event) {
     event.preventDefault();
-    console.log(user);
+
+    try {
+        const response = await loginUser(user);
+
+        setUser({
+          email:"",
+          password:""
+        })
+
+        if(response.success) {
+          alert(response.message);
+          localStorage.setItem('token', response.token);
+          window.location.href = "/";
+        } else {
+          alert(response.message);
+        }
+    } catch (error) {
+      alert(error.message);
+    }
+
   }
 
   return (
