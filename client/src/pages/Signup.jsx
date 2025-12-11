@@ -1,13 +1,31 @@
 import React, { useState } from 'react'
 import {Link} from "react-router-dom";
-
+import {signupUser} from "./../apiCalls/auth.js"
 const Signup = () => {
 
   const [user, setUser] = useState({firstName : "", lastName : "", email : "", password : ""});
 
-  function formSubmitHandler(event) {
+  async function formSubmitHandler(event) {
+
     event.preventDefault();
-    console.log(user);
+
+    try {
+      const response = await signupUser(user);
+      setUser({
+        firstName:"",
+        lastName:"",
+        email:"",
+        password:""
+      })
+
+      if(response.success) {
+        alert(response.message);
+      } else {
+        alert(response.message);
+      }
+    } catch (error) {
+        alert(error?.response?.data?.message || error.message || "Something went wrong");
+    }
   }
 
   return (
