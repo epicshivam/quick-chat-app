@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import {Link} from "react-router-dom";
 import { loginUser } from '../apiCalls/auth.js';
+import { useNavigate } from 'react-router-dom';
+import {toast} from 'react-hot-toast';
 
 const Login = () => {
 
   const [user, setUser] = useState({email : "", password : ""});
+  const navigate = useNavigate();
 
   async function formSubmitHandler(event) {
     event.preventDefault();
@@ -17,15 +20,12 @@ const Login = () => {
           password:""
         })
 
-        if(response.success) {
-          alert(response.message);
-          localStorage.setItem('token', response.token);
-          window.location.href = "/";
-        } else {
-          alert(response.message);
-        }
+        toast.success(response.message);
+        localStorage.setItem('token', response.token);
+        navigate('/');
+
     } catch (error) {
-      alert(error.message);
+      toast.error(error.response?.data?.message || "Login Failed",{id:"login-error"});
     }
 
   }
