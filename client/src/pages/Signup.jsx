@@ -2,9 +2,12 @@ import React, { useState } from 'react'
 import {Link} from "react-router-dom";
 import {signupUser} from "./../apiCalls/auth.js"
 import {toast} from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { hideLoader, showLoader } from '../redux/loaderSlice.js';
 
 const Signup = () => {
 
+  const dispatch = useDispatch();
   const [user, setUser] = useState({firstName : "", lastName : "", email : "", password : ""});
 
   async function formSubmitHandler(event) {
@@ -12,7 +15,9 @@ const Signup = () => {
     event.preventDefault();
 
     try {
+      dispatch(showLoader());
       const response = await signupUser(user);
+      dispatch(hideLoader());
       setUser({firstName:"",
         lastName:"",
         email:"",
@@ -21,6 +26,7 @@ const Signup = () => {
         toast.success(response.message);
     } catch (error) {
         toast.error(error?.response?.data?.message || error.message || "Something went wrong", {id:"login-error"});
+        dispatch(hideLoader());
     }
   }
 

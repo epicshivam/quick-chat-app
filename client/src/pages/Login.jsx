@@ -3,9 +3,12 @@ import {Link} from "react-router-dom";
 import { loginUser } from '../apiCalls/auth.js';
 import { useNavigate } from 'react-router-dom';
 import {toast} from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { hideLoader, showLoader } from '../redux/loaderSlice.js';
 
 const Login = () => {
 
+  const dispatch = useDispatch();
   const [user, setUser] = useState({email : "", password : ""});
   const navigate = useNavigate();
 
@@ -13,7 +16,9 @@ const Login = () => {
     event.preventDefault();
 
     try {
+      dispatch(showLoader());
         const response = await loginUser(user);
+      dispatch(hideLoader());
 
         setUser({
           email:"",
@@ -25,6 +30,7 @@ const Login = () => {
         navigate('/');
 
     } catch (error) {
+      dispatch(hideLoader());
       toast.error(error.response?.data?.message || "Login Failed",{id:"login-error"});
     }
 

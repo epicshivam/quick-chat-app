@@ -5,12 +5,14 @@ import Login from "./pages/Login.jsx";
 import {Toaster} from "react-hot-toast";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Loader from "./components/Loader.jsx";
+import { useSelector } from "react-redux";
 
 function App() {
+  const { loader } = useSelector(state => state.loaderReducer)
   return (
     <>
     <Toaster position="top-center" reverseOrder={false}/>
-    <Loader/>
+    { loader && <Loader/> }
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
