@@ -40,7 +40,7 @@ function ProtectedRoute({children}){
 
     return (
         <div>
-            <p>Welcome, {user?.firstName + " " + user?.lastName}</p>
+            {/* <p>Welcome, {user?.firstName + " " + user?.lastName}</p> */}
             { children }
         </div>
     );
