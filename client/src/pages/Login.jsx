@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import {toast} from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { hideLoader, showLoader } from '../redux/loaderSlice.js';
+import { setUser } from "../redux/usersSlice";
 
 const Login = () => {
 
@@ -20,14 +21,16 @@ const Login = () => {
         const response = await loginUser(user);
       dispatch(hideLoader());
 
+      dispatch(setUser(response.user));
+
+      toast.success(response.message);
+      localStorage.setItem('token', response.token);
+      navigate('/');
+
         setUser({
           email:"",
           password:""
         })
-
-        toast.success(response.message);
-        localStorage.setItem('token', response.token);
-        navigate('/');
 
     } catch (error) {
       dispatch(hideLoader());
